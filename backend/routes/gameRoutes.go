@@ -94,7 +94,10 @@ func MakeMove(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-
+		if m.Cell < 0 || m.Cell > 8 {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(`{"message": "Invalid Cell"}`))
+		}
 		g, _ := models.GetGame(m.Game_key)
 		if g.Current_turn == 0 {
 			if g.MakeMove(m.Cell, true) {
