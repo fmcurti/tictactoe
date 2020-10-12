@@ -38,7 +38,8 @@ const Game = (props) => {
     const [winner,setWinner]         = useState(0)
     const [boardState,setBoardState] = useState([])
     const [isLoading,setIsLoading] = useState(true)
-  
+    const [waiting,setWaiting]   = useState(false)
+
     const handleMakeMove = (cell_id) => {
       if (playerTurn && boardState[cell_id] == '') {
         gameApi
@@ -80,6 +81,7 @@ const Game = (props) => {
           window.localStorage.removeItem('savedGameKey')
         }
         setIsLoading(false)
+        setWaiting(false)
       }
     ) },[props.gameKey,setBoardState,setPlayerTurn,setWinner])
   
@@ -93,7 +95,8 @@ const Game = (props) => {
     },[props.gameKey,history,updateGameStateCallback])
   
     useInterval(() => {
-      if (!playerTurn) {
+      if (!playerTurn && !waiting) {
+        setWaiting(true)
         updateGameStateCallback()
       }
     },1000)
