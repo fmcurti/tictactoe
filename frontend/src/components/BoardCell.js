@@ -13,13 +13,12 @@ const Cell = styled.button`
   width: 100%;
 `
 
-
-const BoardCell =({cell_id,boardState,handleMakeMove}) => {
+const BoardCell = ({ cell_id, boardState, handleMakeMove }) => {
   return (
-  <Slot>
-    <Cell onClick={() => handleMakeMove(cell_id)}>{boardState[cell_id]}</Cell>
-  </Slot>
-)
+    <Slot>
+      <Cell onClick={() => handleMakeMove(cell_id)}>{boardState[cell_id]}</Cell>
+    </Slot>
+  )
 }
 
 export default BoardCell

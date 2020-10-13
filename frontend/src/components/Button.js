@@ -17,10 +17,10 @@ const Button = styled.button`
   margin: 1em 1em;
   padding: 0.25em 1em;
 
-  ${props => props.disabled ? 
-    `
+  ${props => props.disabled
+    ? `
     background: lightgray;
-    ` 
+    `
     : ''
   }
 `

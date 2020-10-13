@@ -1,22 +1,10 @@
 import axios from 'axios'
 const baseUrl = 'https://powerful-journey-30384.herokuapp.com'
 
-
 const delay = retryCount =>
-  new Promise(resolve => setTimeout(resolve, 10 ** retryCount));
+  new Promise(resolve => setTimeout(resolve, 10 ** retryCount))
 
-
-const getResource = async (retryCount = 0, lastError = null) => {
-  if (retryCount > 5) throw new Error(lastError);
-  try {
-    return apiCall();
-  } catch (e) {
-    await delay(retryCount);
-    return getResource(retryCount + 1, e);
-  }
-};
-
-const getGame = async (game_key,retryCount = 0, lastError = null) => {
+const getGame = async (game_key, retryCount = 0, lastError = null) => {
   try {
     const response = await axios.get(`${baseUrl}/game/get?game_key=${encodeURIComponent(game_key)}`)
     return response.data
@@ -26,7 +14,7 @@ const getGame = async (game_key,retryCount = 0, lastError = null) => {
   }
 }
 
-const newGame = async (gameOptions,retryCount = 0, lastError = null) => {
+const newGame = async (gameOptions, retryCount = 0, lastError = null) => {
   try {
     const response = await axios.post(`${baseUrl}/game/new`, gameOptions)
     return response.data
@@ -36,24 +24,24 @@ const newGame = async (gameOptions,retryCount = 0, lastError = null) => {
   }
 }
 
-const makeMove =  async (move, retryCount = 0, lastError = null)  => {
-  try {  
+const makeMove = async (move, retryCount = 0, lastError = null) => {
+  try {
     const response = await axios.post(`${baseUrl}/game/make_move`, move)
     return response.data
   } catch (e) {
     await delay(retryCount)
     return makeMove(move, retryCount + 1, e)
   }
-}  
+}
 
 const highscores = async (page, retryCount = 0, lastError = null) => {
   try {
-    const response =  await axios.get(`${baseUrl}/highscores?offset=${page * 10}&limit=10`)
+    const response = await axios.get(`${baseUrl}/highscores?offset=${page * 10}&limit=10`)
     return response.data
-  } catch(e) {
+  } catch (e) {
     await delay(retryCount)
     return makeMove(page, retryCount + 1, e)
   }
 }
 
-export default { getGame, newGame, makeMove,highscores }
+export default { getGame, newGame, makeMove, highscores }

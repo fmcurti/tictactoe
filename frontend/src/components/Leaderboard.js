@@ -1,12 +1,10 @@
-import React, { useState,useEffect,useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import gameApi from '../services/gameApi'
 import Container from './Container'
 import Button from './Button'
-
-
 
 const Table = styled.table`
   text-align: center;
@@ -27,21 +25,20 @@ const ButtonGroup = styled.div`
 `
 
 const Leaderboard = (props) => {
-
-  const [page,setPage] = useState(0)
-  const [leaderboard,setLeaderboard] = useState([])
-  const [maxPages,setMaxPages] = useState(0)
+  const [page, setPage] = useState(0)
+  const [leaderboard, setLeaderboard] = useState([])
+  const [maxPages, setMaxPages] = useState(0)
 
   const history = useHistory()
 
   const getLeaderboardCallback = useCallback(() => {
     gameApi
-    .highscores(page)
-    .then(res => {
-      setLeaderboard(res.entries)
-      setMaxPages(res.pages)
-    })
-  },[setLeaderboard,setMaxPages,page])
+      .highscores(page)
+      .then(res => {
+        setLeaderboard(res.entries)
+        setMaxPages(res.pages)
+      })
+  }, [setLeaderboard, setMaxPages, page])
 
   const handlePageChange = newPage => {
     setPage(newPage)
@@ -49,13 +46,13 @@ const Leaderboard = (props) => {
 
   useEffect(() => {
     getLeaderboardCallback()
-  },[getLeaderboardCallback])
+  }, [getLeaderboardCallback])
 
-  const rows = () => leaderboard.map((entry,i) => 
-      <tr key={i}>
-        <Entry>{entry.player_name}</Entry>
-        <Entry>{entry.play_time}</Entry>
-      </tr>
+  const rows = () => leaderboard.map((entry, i) =>
+    <tr key={i}>
+      <Entry>{entry.player_name}</Entry>
+      <Entry>{entry.play_time}</Entry>
+    </tr>
   )
   return (
     <Container>
@@ -67,18 +64,16 @@ const Leaderboard = (props) => {
           </tr>
         </thead>
         <tbody>
-            {rows()}
+          {rows()}
         </tbody>
       </Table>
       <ButtonGroup>
-        <Button disabled={page == 0} onClick={() => handlePageChange(page - 1)} >Previous</Button>
-        <Button disabled={page == maxPages - 1} onClick={() => handlePageChange(page + 1)}>Next</Button> 
+        <Button disabled={page === 0} onClick={() => handlePageChange(page - 1)} >Previous</Button>
+        <Button disabled={page === maxPages - 1} onClick={() => handlePageChange(page + 1)}>Next</Button>
       </ButtonGroup>
       <Button onClick={() => history.push('/')}>Back to Main Menu</Button>
     </Container>
   )
-
-} 
-
+}
 
 export default Leaderboard
